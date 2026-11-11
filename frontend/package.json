@@ -1,0 +1,42 @@
+{
+  "name": "sinalyx-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "typecheck": "vue-tsc --noEmit",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:typecheck": "vue-tsc --noEmit -p tsconfig.test.json"
+  },
+  "dependencies": {
+    "axios": "^1.20.0",
+    "lucide-vue-next": "^0.468.0",
+    "vue": "^3.5.42",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.19.43",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/test-utils": "2.4.11",
+    "autoprefixer": "^10.4.20",
+    "jsdom": "26.1.0",
+    "postcss": "^8.5.23",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2",
+    "vite": "^6.4.5",
+    "vitest": "4.1.12",
+    "vue-tsc": "3.3.14"
+  },
+  "overrides": {
+    "js-beautify@1.15.4": {
+      "glob": "14.0.4",
+      "editorconfig@1.0.7": {
+        "minimatch": "11.0.5"
+      }
+    }
+  }
+}

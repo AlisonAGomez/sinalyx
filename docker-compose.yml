@@ -1,0 +1,112 @@
+name: sinalyx
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api}
+        VITE_APP_ENV: ${VITE_APP_ENV:-local}
+    # Nome visível no Docker; o serviço continua acessível internamente como frontend.
+    container_name: sinalyx-painel
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "${SINALYX_FRONTEND_BIND:-127.0.0.1}:${SINALYX_FRONTEND_HOST_PORT:-80}:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/ >/dev/null 2>&1 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 8
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # API e processamento das análises; o endereço interno api permanece igual.
+    container_name: sinalyx-servidor
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      SINALYX_ENV: ${SINALYX_ENV:-local}
+      SINALYX_CORS_ORIGINS: ${SINALYX_CORS_ORIGINS:-http://localhost,http://127.0.0.1,http://sinalyx.local,http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,http://127.0.0.1:3000}
+      DATABASE_ENABLED: ${DATABASE_ENABLED:-true}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://sinalyx:sinalyx@postgres:5432/sinalyx}
+      POSTGRES_DB: ${POSTGRES_DB:-sinalyx}
+      POSTGRES_USER: ${POSTGRES_USER:-sinalyx}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sinalyx}
+      SINALYX_AUTH_SECRET_KEY: ${SINALYX_AUTH_SECRET_KEY:-}
+      # Sem confiança automática em X-Forwarded-For. Cadastre somente proxies controlados.
+      FORWARDED_ALLOW_IPS: ${FORWARDED_ALLOW_IPS:-}
+      SINALYX_ACCESS_TOKEN_EXPIRE_MINUTES: ${SINALYX_ACCESS_TOKEN_EXPIRE_MINUTES:-720}
+      SINALYX_ADMIN_NAME: ${SINALYX_ADMIN_NAME:-Administrador Sinalyx}
+      SINALYX_ADMIN_EMAIL: ${SINALYX_ADMIN_EMAIL:-admin@sinalyx.local}
+      SINALYX_ADMIN_PASSWORD: ${SINALYX_ADMIN_PASSWORD:-}
+      SINALYX_SUPER_ADMIN_EMAIL: ${SINALYX_SUPER_ADMIN_EMAIL:-admin@sinalyx.local}
+    ports:
+      - "${SINALYX_API_BIND:-127.0.0.1}:${SINALYX_API_HOST_PORT:-8000}:8000"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5)"]
+      interval: 15s
+      timeout: 8s
+      retries: 12
+      start_period: 30s
+
+  live-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Coleta experimental, mantida separada dos três serviços principais.
+    container_name: sinalyx-coleta-experimental
+    command: ["python", "-m", "src.workers.pfsense_live_worker"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_ENABLED: ${DATABASE_ENABLED:-true}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://sinalyx:sinalyx@postgres:5432/sinalyx}
+      POSTGRES_DB: ${POSTGRES_DB:-sinalyx}
+      POSTGRES_USER: ${POSTGRES_USER:-sinalyx}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sinalyx}
+      SINALYX_PFSENSE_WORKER_INTERVAL_SECONDS: ${SINALYX_PFSENSE_WORKER_INTERVAL_SECONDS:-5}
+      SINALYX_PFSENSE_WORKER_AUTOSTART: ${SINALYX_PFSENSE_WORKER_AUTOSTART:-false}
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    # SIGTERM permite concluir a rodada; ajustar para a duração observada do ciclo.
+    stop_grace_period: 120s
+
+  postgres:
+    image: postgres:16
+    # Banco da aplicação; o endereço interno postgres e o volume permanecem iguais.
+    container_name: sinalyx-banco
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-sinalyx}
+      POSTGRES_USER: ${POSTGRES_USER:-sinalyx}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sinalyx}
+    ports:
+      - "${SINALYX_POSTGRES_BIND:-127.0.0.1}:${SINALYX_POSTGRES_HOST_PORT:-5432}:5432"
+    volumes:
+      - sinalyx_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-sinalyx} -d $${POSTGRES_DB:-sinalyx}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+volumes:
+  sinalyx_pgdata:

@@ -1,0 +1,5 @@
+# Ambiente completo de desenvolvimento, testes e coleta SSH opcional.
+-r requirements-runtime.txt
+-r requirements-optional-pfsense.txt
+pytest==9.1.1
+httpx2==2.13.1

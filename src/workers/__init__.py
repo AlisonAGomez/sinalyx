@@ -1,0 +1,1 @@
+"""Processos dedicados do Sinalyx."""

@@ -1,0 +1,19 @@
+# Runtime instalado Windows / Python 3.10.11. Pins preservados do baseline.
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+pandas==2.3.3
+numpy==2.2.6
+scikit-learn==1.7.2
+tensorflow==2.21.0
+joblib==1.5.3
+SQLAlchemy==2.0.52
+psycopg2-binary==2.9.12
+python-dotenv==1.2.3
+python-multipart==0.0.32
+pydantic==2.13.4
+alembic==1.19.1
+
+# Formatos e transitivas numéricas do runtime current.
+keras==3.12.4
+h5py==3.14.0
+scipy==1.15.3

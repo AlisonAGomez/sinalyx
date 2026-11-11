@@ -1,0 +1,10 @@
+v0.1.1-tcc
+Sinalyx versao TCC com deploy local permanente via Docker
+Data: 2026-05-21
+Commit Git: nao disponivel neste checkout
+Notas:
+- Docker Compose com frontend em porta 80 e proxy /api para FastAPI.
+- restart: unless-stopped nos servicos principais.
+- PostgreSQL preservado em volume persistente.
+- Scripts Windows para start, stop, status e autostart.
+- Backup completo criado antes das alteracoes de deploy.

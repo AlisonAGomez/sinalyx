@@ -1,0 +1,2 @@
+# Necessário somente para a coleta direta pfSense por SSH/SFTP.
+paramiko==5.0.0

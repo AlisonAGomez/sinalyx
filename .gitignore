@@ -1,0 +1,79 @@
+# Ambiente local e credenciais
+.env
+.env.*
+!.env.example
+!frontend/.env.example
+.venv/
+venv/
+ENV/
+.vscode/
+.idea/
+
+# Banco de dados, dumps e artefatos locais
+*.db
+*.sqlite
+*.sql
+*.dump
+*.backup
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node/Vite
+node_modules/
+build/
+dist/
+frontend/dist/
+frontend/node_modules/
+frontend/.vite/
+
+# Dados e artefatos gerados
+data/runtime/
+data/tmp/
+data/processed/
+data/models/
+data/raw/**
+!data/raw/
+!data/raw/**/
+!data/raw/**/README.md
+models/experiments/
+
+# Logs, backups e pontos de recuperacao locais
+logs/
+*.log
+backups/
+recovery_points/
+docs/audit/
+docs/validation/
+
+# Modelos treinados/checkpoints
+*.ckpt
+*.checkpoint
+*.pkl
+*.joblib
+*.keras
+*.h5.tmp
+*.keras.tmp
+
+# Execucoes locais do Codex
+.codex-run-logs/
+
+# Capturas e diagnósticos locais: publicar somente versões sanitizadas selecionadas.
+*.pcap
+*.pcapng
+*.cap
+*.bak
+*.bak_*
+*.tmp
+*.temp
+/Sinalyx_diagnostico_bruteforce_contexto/
+/patch_bfdev002_parser.py
+/amostras_historico_bruteforce.txt
+/diagnostico_ground_truth_bruteforce.txt
+/relatorio_bruteforce_candidate_v1.txt
+/data/experiments/bruteforce_validation_v2/development/reports/CAP_DEV_001_WAITING_FOR_MANUAL_EXECUTION.txt

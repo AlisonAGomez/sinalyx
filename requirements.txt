@@ -1,0 +1,2 @@
+# Compatibilidade dos comandos de desenvolvimento existentes.
+-r requirements-dev.txt
