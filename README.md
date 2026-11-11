@@ -61,4 +61,8 @@ Com o ambiente Python preparado, execute `python -m pytest` na raiz. No frontend
 
 ## Informações acadêmicas
 
-O Sinalyx foi desenvolvido no contexto de um TCC. A referência histórica da versão está em [VERSION](VERSION).
+O Sinalyx começou como Trabalho de Conclusão de Curso desenvolvido em equipe. Conforme informado pelo proprietário do repositório, os direitos sobre o código da etapa acadêmica são compartilhados entre os integrantes.
+
+O proprietário conduzirá individualmente a evolução pós-TCC, respeitando os direitos sobre os componentes reutilizados da etapa acadêmica. O objetivo dessa evolução é transformar o Sinalyx em um produto de segurança para ambientes empresariais. Esse objetivo faz parte do trabalho futuro.
+
+A referência histórica da versão está em [VERSION](VERSION).

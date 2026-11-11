@@ -1,11 +1,15 @@
 ## Mudança
 
-Descreva o problema, a alteração e os módulos afetados.
+O que mudou, por que a mudança foi necessária e quais arquivos ou módulos foram afetados?
 
 ## Validação
 
-Liste os comandos executados, seus resultados e as verificações pendentes.
+Quais testes foram executados e quais foram os resultados? Liste os testes que ficaram pendentes e explique o motivo.
 
 ## Impacto
 
-Informe se houve mudança em contratos, permissões, dados persistidos ou comportamento científico. Identifique evidências com dados sintéticos quando aplicável.
+Informe impactos em segurança, banco, API ou componentes científicos. Registre a autorização quando houver mudança em componentes científicos oficiais.
+
+## Evidências
+
+Inclua evidências quando ajudarem a revisão. Use dados sintéticos ou sanitizados. Mantenha credenciais, dados reais e informações sensíveis fora dos relatórios públicos.
